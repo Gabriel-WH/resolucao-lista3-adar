@@ -356,9 +356,7 @@ str(q5_df)
 
 Baixando os dados.
 
-```{r, eval=FALSE}
-getwd()
-# sua resposta aqui
+```{r}
 link <- "https://www.dropbox.com/s/w3wp6iwxqex95ep/S_America_model_wtd_v2.nc?dl=1"
 download.file(link, 
               destfile = "S_America_model_wtd_v2.nc", 
@@ -392,7 +390,6 @@ nc_close(q6_ncopen)
    c. Importe os dados para o R usando o pacote raster.
 
 ```{r}
-# sua resposta aqui
 library(raster)
 #wtd <- brick("S_America_model_wtd_v2.nc")
 wtd <- raster("S_America_model_wtd_v2.nc")
@@ -423,7 +420,7 @@ str(wtd_df)
    e. Altere os nomes das colunas do quadro de dados para "wtd", "lon", "lat"
 
 ```{r}
-names(wtd_df) <- c("lon","lat","wtd")
+names(wtd_df) <- c("wtd","lon","lat")
 str(wtd_df)
 ```
 
@@ -434,7 +431,8 @@ str(wtd_df)
 dim(wtd_df)
 ```
 
-Porque a função `as.data.frame` do pacote `raster` com o argumento `na.rm` como `TRUE` faz com que as linhas sem valores (valor = `NA`) sejam removidas.
+Porque a função `as.data.frame` do pacote `raster` com o argumento `na.rm` como `TRUE` faz com que as linhas sem valores (valor = `NA`) sejam removidas. Assim, enquanto o número de células (observações) do objeto importado é 62366400, o número de linhas do *data frame* é 22347186.
+
 - - -
 
 7. a. Importe da *web* diretamente para o R os dados do índice multivariado em tempo real da Oscilação de Madden-Julian disponível em http://www.bom.gov.au/climate/mjo/graphics/rmm.74toRealtime.txt.
@@ -458,7 +456,7 @@ q7_data <- import(
 ```
 
 ```{r, eval = FALSE}
-q7_arq <- "rmm_74toRealtime.txt"
+q7_arq <- "rmm.74toRealtime.txt"
 
 download.file(url = q7_url, destfile = q7_arq)
 ```
@@ -505,6 +503,8 @@ library(xlsx)
 q7_arq_xls <- "mjo.xls"
 
 write.xlsx(x = q7_data, file = q7_arq_xls)
+
+file.exists(q7_arq_xls)
 ```
     
    d. Importe no R o arquivo excel nomeado `mjo.xls` e mostre qual a classe dos dados importados.
@@ -650,7 +650,7 @@ dim(q10_df_xyna)
 
 O arquivo NetCDF contém os dados referentes à precipitação em 27216 células de grade, número de células este que vem da multiplicação entre as quantidades de dados de latitude (162) e longitude (168). A dimensão do tempo é de 2191 instâncias. Ou seja, o arquivo contém medidas de precipitação em 27216 células de grade para 2191 instâncias de tempo.
 
-O *data frame* mais básico (com `xy` e `na.rm` avaliados como `FALSE) nos fornece justamente as dimensões que já foram mencionadas (27216 X 2191), 27216  observações (linhas) para cada instância de tempo (colunas). Um *data frame* com `xy = TRUE`, mas com `na.rm = FALSE`, tem as dimensões 27216 X 2193, ou seja, duas colunas a mais que o *data frame* mais básico - já visto -, isso porque são avaliadas as coordendas para cada observação (linha), então as duas novas colunas referem-se aos valores da latitude e longitude - de cada observação -.
+O *data frame* mais básico (com `xy` e `na.rm` avaliados como `FALSE`) nos fornece justamente as dimensões que já foram mencionadas (27216 X 2191), 27216  observações (linhas) para cada instância de tempo (colunas). Um *data frame* com `xy = TRUE`, mas com `na.rm = FALSE`, tem as dimensões 27216 X 2193, ou seja, duas colunas a mais que o *data frame* mais básico - já visto -, isso porque são avaliadas as coordendas para cada observação (linha), então as duas novas colunas referem-se aos valores da latitude e longitude - de cada observação -.
 
 O *data frame* com `xy = TRUE` e `na.rm = TRUE` nos dá um quadro de dados com as dimensões 11299 X 2193. O número de colunas é o mesmo do último *data frame* visto, pois são as mesmas, mas o número de linhas (observações) é bastante reduzido, isso porque as linhas de dados faltantes são desconsideradas do quadro de dados.
 
